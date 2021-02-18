@@ -98,5 +98,61 @@ window.dom = {
             return node.classList.contains(className);
         }
     },
+    on(node, eventName, fn) {
+        node.addEventListener(eventName, fn);
+    },
+    off(node, eventName, fn) {
+        node.removeEventListener(eventName, fn);
+    },
+    find(selector, scope) {
+        //默认是document，如果给了scope
+        return (scope || document).querySelector(selector);
+    },
+    findAll(selector, scope) {
+        return (scope || document).querySelectorAll(selector);
+    },
+    parent(node) {
+        return node.parentNode;
+    },
+    children(node) {
+        return node.children;
+    },
+    siblings(node) {
+        // node.parentNode,children是伪数组
+        return Array.from(node.parentNode.children).filter(n => n !== node);
+    },
+    next(node) {
+        let nextNode = node.nextSibling;
+        while (nextNode.nodeType === 3) {
+            //nodeType === 3 指的是文本
+            nextNode = nextNode.nextSibling;
+        }
+        return nextNode;
+    },
+    previous(node) {
+        let prevNode = node.previousSibling;
+        while (prevNode.nodeType === 3) {
+            //nodeType === 3 指的是文本
+            prevNode = prevNode.previousSibling;
+        }
+        return prevNode;
+    },
+    each(nodeList, fn) {
+        //每个
+        for (let i = 0; i < nodeList.length; i++) {
+            fn.call(null, nodeList[i]);
+        }
+    },
+    index(node) {
+        const nodeList = dom.children(node.parentNode);
+        let i;
+        for (i = 0; i < nodeList.length; i++) {
+            if (nodeList[i] === node) {
+                break;
+            }
+        }
+        return i;
+    }
+
 
 };
